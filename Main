@@ -1,0 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package lab_3;
+
+/**
+ *
+ * @author Madeline
+ */
+
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+public class Main {
+    
+    public static void main(String [] args)
+	{
+            Scanner in = new Scanner(System.in);
+            
+            System.out.print("Enter a board size (ex: 8 for an 8x8 board): ");
+            int size = in.nextInt() - 1; //the first row is actually the 0th row, so we have to adjust their input to match that of the array
+            System.out.print("Enter a number for the starting square (1 to " + (size^2) + "): ");
+            int start = in.nextInt();
+
+            Board board = new Board(size);
+            
+            
+        }
+    
+}
