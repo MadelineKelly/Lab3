@@ -1,0 +1,70 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package lab_3;
+
+/**
+ *
+ * @author Madeline
+ */
+public class Board {
+    
+    private boolean[][] board;
+    private boolean current, visited;
+    private int cycle, size, r0, c0, moves;
+    
+    private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
+        {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} };
+    
+    Board(int size)
+    {
+        this.size = size;
+        board = new boolean[size][size];
+    }
+    
+    public boolean get(int pos)
+    {
+        int c = (c-1)%size;
+        int r = (r-1)/size;
+        visited = board[r][c];
+        return visited;
+    }
+
+    public int getNextPos() // picks next
+    { // possible
+        while(cycle < 8) // move
+        {
+            int dc = moves8[cycle][0]; // get move in
+            int dr = moves8[cycle][1]; // (x,y) format
+            int c = (c-1)%size; // translate from j
+            int r = (r-1)/size; // to (x,y) format
+            c = c + dc; // add move to
+            r = r + dr; // position
+            cycle++; // used this move
+            if(c>=0 && c<size && r>=0 && r<size) // on the board?
+            { // yes
+                int nextPos = c + r*size + 1; // (x,y) to j
+                if(get(nextPos)==false) // unoccupied cell?
+                { // yes
+                    return nextPos; // found a move
+                }
+            } // end if(x>=0...)
+        } // end while // no possible move
+        cycle = 0; // reset move index
+        return -1; // failure
+    } // end getNextPos()
+}   
+
+//take in starting square and start making moves
+//make as visited (true) when moved to
+//put position ("j" value) on a stack
+//determine c and r from j...
+//keep track of number of moves
+//determine whether or not we have failed
+//What does last "()" value mean in their output for moving sequence?
+//How do we back track when we get stuck? 
+//      - Making sure we change the spots we visited back to false
+//      - Keeping track of where we've been
+//Do we want to use their getNextPos method or our own?
