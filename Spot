@@ -1,0 +1,49 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package lab_3;
+
+/**
+ *
+ * @author Madeline
+ */
+public class Spot {
+
+  private boolean visited;
+  private int count;
+  
+  Spot()
+  {
+    visited = false;
+    count = 0;
+  }
+  
+  public void setVisited()
+  {
+    visited = true;
+    count = 1;
+  }
+  
+  public void setCount()
+  {
+    count = count + 1;
+  }
+  
+  public void getCount()
+  {
+    return count;
+  }
+    
+  public boolean getVisited()
+  {
+    return visited;
+  }
+  
+  public void resetVisited()
+  {
+    visited = false;
+  }
+      
+}
