@@ -26,20 +26,20 @@ public class Board {
     
     public boolean get(int pos)
     {
-        int c = (c-1)%size;
-        int r = (r-1)/size;
+        int c = (pos-1)%size;
+        int r = (pos-1)/size;
         visited = board[r][c];
         return visited;
     }
 
-    public int getNextPos() // picks next
+    public int getNextPos(int pos) // picks next
     { // possible
         while(cycle < 8) // move
         {
             int dc = moves8[cycle][0]; // get move in
             int dr = moves8[cycle][1]; // (x,y) format
-            int c = (c-1)%size; // translate from j
-            int r = (r-1)/size; // to (x,y) format
+            int c = (pos-1)%size; // translate from j
+            int r = (pos-1)/size; // to (x,y) format
             c = c + dc; // add move to
             r = r + dr; // position
             cycle++; // used this move
