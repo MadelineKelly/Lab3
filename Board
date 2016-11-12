@@ -26,10 +26,21 @@ public class Board {
     
     public boolean get(int pos)
     {
-        int c = (pos-1)%size;
-        int r = (pos-1)/size;
+        int c = pos%size;
+        int r = (pos/size) + 1;
         visited = board[r][c];
         return visited;
+    }
+    
+    public void Move(int pos)
+    {
+        int c = pos%size;
+        int r = (pos/size) + 1;
+        current = board[r][c];
+        current = true;
+        push spot;
+        next = getNextPos(pos);
+        Move(next);
     }
 
     public int getNextPos(int pos) // picks next
@@ -38,8 +49,8 @@ public class Board {
         {
             int dc = moves8[cycle][0]; // get move in
             int dr = moves8[cycle][1]; // (x,y) format
-            int c = (pos-1)%size; // translate from j
-            int r = (pos-1)/size; // to (x,y) format
+            int c = pos%size; // translate from j
+            int r = (pos/size) + 1; // to (x,y) format
             c = c + dc; // add move to
             r = r + dr; // position
             cycle++; // used this move
@@ -57,14 +68,20 @@ public class Board {
     } // end getNextPos()
 }   
 
+//Idea: Create a Spot class that keeps track of whether or not the spot has been visited (true/false), and how many times we've back tracked to it.
+//If we've only been in this spot once, make the first move of move8. If it's the second time (i.e. we backtracked once because we got stuck), make
+//the second move of move8. And so on and so forth.
+//If all options have been exhausted for every spot, then return "Failure."
+
+//Things to do:
 //take in starting square and start making moves
-//make as visited (true) when moved to
-//put position ("j" value) on a stack
-//determine c and r from j...
+//mark as visited (true) when moved to
+//put Spot info on a stack
 //keep track of number of moves
+//pop off stack and mark as false if we must backtrack
 //determine whether or not we have failed
 //What does last "()" value mean in their output for moving sequence?
 //How do we back track when we get stuck? 
 //      - Making sure we change the spots we visited back to false
-//      - Keeping track of where we've been
-//Do we want to use their getNextPos method or our own?
+//      - Keeping track of which moves we've already done we've been
+//Do we want to use their getNextPos method or our own? //Mix of both
