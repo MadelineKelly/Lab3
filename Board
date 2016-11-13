@@ -15,9 +15,9 @@ import java.util.Stack;
 public class Board {
     
     private Spot[][] board;
-    private Spot current;
+    private Spot current, nextMove;
     private boolean visited;
-    private int cycle, size, r0, c0, moves, c, r, nextPos;
+    private int size, r0, c0, countMoves, c, r, nextPos;
     private Stack stack;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
@@ -71,7 +71,7 @@ public class Board {
 //        move(nextPos, count);
 //    }
 
-    public void move(int pos, int count) // picks next
+    public String move(int pos, int count, int cycle) // picks next
     { // possible
         count++;
         while(cycle < 8) // move
@@ -80,23 +80,39 @@ public class Board {
             int dr = moves8[cycle][1]; // (x,y) format
             c = getC(pos);
             r = getR(pos);
+            current = board[r][c];
+            current.visit();
             c = c + dc; // add move to
             r = r + dr; // position
             cycle++; // used this move
             if(c>=0 && c<size && r>=0 && r<size) // on the board?
             { // yes
                 if(board[r][c].getVisited()==false) // unoccupied cell?
-                { // yes
+                { // yes       
+                    nextMove = board[r][c];
+                    nextMove.visit();
+                    String m = Integer.toString(pos) + " " + Integer.toString(nextPos);
                     int nextPos = c + r*size + 1; // (x,y) to j
-                    move(nextPos, count); // found a move
-                    String m = Integer.toString(pos);
+                    move(nextPos, count, cycle); // found a move
+                    countMoves = count;
+                    
+                    if (countMoves == (size*size))
+                    {
+                        return m;    
+                    }
                 }
             } // end if(x>=0...)
         } // end while // no possible move
-        System.out.println("");
         cycle = 0; // reset move index
+        String m = "Failure";
+        return m;
         //return -1; // failure
     } // end getNextPos()
+    
+    public int getMoves()
+    {
+        return countMoves;
+    }
 }   
 
 //Idea: Create a Spot class that keeps track of whether or not the spot has been visited (true/false), and how many times we've been to it.
