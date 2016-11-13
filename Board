@@ -11,9 +11,9 @@ package lab_3;
  */
 public class Board {
     
-    private boolean[][] board;
+    private Spot[][] board;
     private boolean current, visited;
-    private int cycle, size, r0, c0, moves;
+    private int cycle, size, r0, c0, moves, c, r;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
         {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} };
@@ -21,36 +21,57 @@ public class Board {
     Board(int size)
     {
         this.size = size;
-        board = new boolean[size][size];
+        board = new Spot[size][size];
+        
+        //fill board with new Spots
+        for (int i = 0; i < board.length; i++)
+        {
+           for(int j = 0; j < board[0].length; j++)
+           {
+               board[i][j] = new Spot();
+           }
+        }
     }
     
     public boolean get(int pos)
     {
-        int c = pos%size;
-        int r = (pos/size) + 1;
-        visited = board[r][c];
+        c = getC(pos);
+        r = getR(pos);
+        visited = board[r][c].getVisited();
         return visited;
+    }
+    
+    public int getC(int pos)
+    {
+        c = pos%size;
+        return c;
+    }
+    
+    public int getR(int pos)
+    {
+        r = (pos/size) + 1;
+        return r;
     }
     
     public void Move(int pos)
     {
-        int c = pos%size;
-        int r = (pos/size) + 1;
-        current = board[r][c];
-        current = true;
-        push spot;
-        next = getNextPos(pos);
+        c = getC(pos);
+        r = getR(pos);
+        current = board[r][c].getVisited();
+        current.setVisited(true);
+        push board[r][c];
+        next = getNextPos(pos, board[r][c].getCount());
         Move(next);
     }
 
-    public int getNextPos(int pos) // picks next
+    public int getNextPos(int pos, int cycle) // picks next
     { // possible
-        while(cycle < 8) // move
-        {
+        %while(cycle < 8) // move
+        %{
             int dc = moves8[cycle][0]; // get move in
             int dr = moves8[cycle][1]; // (x,y) format
-            int c = pos%size; // translate from j
-            int r = (pos/size) + 1; // to (x,y) format
+            c = getC(pos);
+            r = getR(pos);
             c = c + dc; // add move to
             r = r + dr; // position
             cycle++; // used this move
@@ -62,9 +83,9 @@ public class Board {
                     return nextPos; // found a move
                 }
             } // end if(x>=0...)
-        } // end while // no possible move
-        cycle = 0; // reset move index
-        return -1; // failure
+        %} // end while // no possible move
+        %cycle = 0; // reset move index
+        %return -1; // failure
     } // end getNextPos()
 }   
 
