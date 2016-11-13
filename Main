@@ -25,7 +25,7 @@ public class Main {
             int start = in.nextInt();
 
             Board board = new Board(size);
-            
+            board.move(start);
             
         }
     
