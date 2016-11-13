@@ -9,11 +9,16 @@ package lab_3;
  *
  * @author Madeline
  */
+
+import java.util.Stack;
+
 public class Board {
     
     private Spot[][] board;
-    private boolean current, visited;
-    private int cycle, size, r0, c0, moves, c, r;
+    private Spot current;
+    private boolean visited;
+    private int cycle, size, r0, c0, moves, c, r, nextPos;
+    private Stack stack;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
         {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} };
@@ -31,6 +36,7 @@ public class Board {
                board[i][j] = new Spot();
            }
         }
+        Stack stack = new Stack();
     }
     
     public boolean get(int pos)
@@ -53,15 +59,15 @@ public class Board {
         return r;
     }
     
-    public void Move(int pos)
+    public void move(int pos)
     {
         c = getC(pos);
         r = getR(pos);
-        current = board[r][c].getVisited();
+        current = board[r][c];
         current.setVisited(true);
-        push board[r][c];
-        next = getNextPos(pos, board[r][c].getCount());
-        Move(next);
+        stack.push(current);
+        nextPos = getNextPos(pos, current.getCount());
+        move(nextPos);
     }
 
     public int getNextPos(int pos, int cycle) // picks next
@@ -85,14 +91,14 @@ public class Board {
             } // end if(x>=0...)
         //} // end while // no possible move
         //cycle = 0; // reset move index
-        //return -1; // failure
+        return -1; // failure
     } // end getNextPos()
 }   
 
-//Idea: Create a Spot class that keeps track of whether or not the spot has been visited (true/false), and how many times we've back tracked to it.
+//Idea: Create a Spot class that keeps track of whether or not the spot has been visited (true/false), and how many times we've been to it.
 //If we've only been in this spot once, make the first move of move8. If it's the second time (i.e. we backtracked once because we got stuck), make
 //the second move of move8. And so on and so forth.
-//If all options have been exhausted for every spot, then return "Failure."
+//If all options have been exhausted for every spot and we have not won yet, then return "Failure."
 
 //Things to do:
 //take in starting square and start making moves
