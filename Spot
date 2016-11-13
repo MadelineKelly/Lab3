@@ -25,9 +25,9 @@ public class Spot {
     visited = true;
   }
   
-  public void setCount(int inc)
+  public void incCount()
   {
-    count = count + inc;
+    count = count + 1;
   }
   
   public int getCount()
