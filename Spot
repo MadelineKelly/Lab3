@@ -20,17 +20,17 @@ public class Spot {
     count = 0;
   }
   
-  public void setVisited(boolean v)
+  public void visit()
   {
-    visited = v;
+    visited = true;
   }
   
-  public void setCount()
+  public void setCount(int inc)
   {
-    count = count + 1;
+    count = count + inc;
   }
   
-  public void getCount()
+  public int getCount()
   {
     return count;
   }
