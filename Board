@@ -17,7 +17,7 @@ public class Board {
     private Spot[][] board;
     private Spot current, nextMove;
     private boolean visited;
-    private int size, r0, c0, countMoves, c, r, nextPos;
+    private int size, r0, c0, countMoves, c, r;
     private Stack stack;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
@@ -39,13 +39,13 @@ public class Board {
         Stack stack = new Stack();
     }
     
-    public boolean get(int pos)
-    {
-        c = getC(pos);
-        r = getR(pos);
-        visited = board[r][c].getVisited();
-        return visited;
-    }
+//    public boolean get(int pos)
+//    {
+//        c = getC(pos);
+//        r = getR(pos);
+//        visited = board[r][c].getVisited();
+//        return visited;
+//    }
     
     public int getC(int pos)
     {
@@ -82,6 +82,7 @@ public class Board {
             r = getR(pos);
             current = board[r][c];
             current.visit();
+            current.incCount();
             c = c + dc; // add move to
             r = r + dr; // position
             cycle++; // used this move
@@ -91,15 +92,15 @@ public class Board {
                 { // yes       
                     nextMove = board[r][c];
                     nextMove.visit();
-                    String m = Integer.toString(pos) + " " + Integer.toString(nextPos);
                     int nextPos = c + r*size + 1; // (x,y) to j
-                    move(nextPos, count, cycle); // found a move
+                    String m = Integer.toString(pos) + " " + Integer.toString(nextPos);
+                    move(nextPos, count, nextMove.getCount()); // found a move
                     countMoves = count;
                     
-                    if (countMoves == (size*size))
-                    {
-                        return m;    
-                    }
+//                    if (countMoves == (size*size))
+//                    {
+//                        return m;    
+//                    }
                 }
             } // end if(x>=0...)
         } // end while // no possible move
