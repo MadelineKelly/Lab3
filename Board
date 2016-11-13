@@ -66,8 +66,8 @@ public class Board {
 
     public int getNextPos(int pos, int cycle) // picks next
     { // possible
-        %while(cycle < 8) // move
-        %{
+        //while(cycle < 8) // move
+        //{
             int dc = moves8[cycle][0]; // get move in
             int dr = moves8[cycle][1]; // (x,y) format
             c = getC(pos);
@@ -83,9 +83,9 @@ public class Board {
                     return nextPos; // found a move
                 }
             } // end if(x>=0...)
-        %} // end while // no possible move
-        %cycle = 0; // reset move index
-        %return -1; // failure
+        //} // end while // no possible move
+        //cycle = 0; // reset move index
+        //return -1; // failure
     } // end getNextPos()
 }   
 
