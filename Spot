@@ -20,10 +20,9 @@ public class Spot {
     count = 0;
   }
   
-  public void setVisited()
+  public void setVisited(boolean v)
   {
-    visited = true;
-    count = 1;
+    visited = v;
   }
   
   public void setCount()
@@ -39,11 +38,6 @@ public class Spot {
   public boolean getVisited()
   {
     return visited;
-  }
-  
-  public void resetVisited()
-  {
-    visited = false;
   }
       
 }
