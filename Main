@@ -20,13 +20,26 @@ public class Main {
             Scanner in = new Scanner(System.in);
             
             System.out.print("Enter a board size (ex: 8 for an 8x8 board): ");
-            int size = in.nextInt() - 1; //the first row is actually the 0th row, so we have to adjust their input to match that of the array
-            System.out.print("Enter a number for the starting square (1 to " + (size^2) + "): ");
+            int size = in.nextInt(); 
+            System.out.print("Enter a number for the starting square (1 to " + (size*size) + "): ");
             int start = in.nextInt();
 
             Board board = new Board(size);
-            board.move(start,0);
+            String s = board.move(start, 0, 0);
             
+            if (s.equals("Failure"))
+            {
+                System.out.println(s);
+                System.out.println("Total Number of Moves = " + board.getMoves());
+                System.out.println("Moving Sequence: " + start);
+                
+            }
+            else
+            {
+                System.out.println("Success!");
+                System.out.println("Total Number of Moves = " + board.getMoves());
+                System.out.println("Moving Sequence: " + s);
+            }
         }
     
 }
