@@ -49,31 +49,33 @@ public class Board {
     
     public int getC(int pos)
     {
-        c = pos%size;
+        c = (pos-1)%size;
         return c;
     }
     
     public int getR(int pos)
     {
-        r = (pos/size) + 1;
+        r = (pos-1)/size;
         return r;
     }
     
-    public void move(int pos)
-    {
-        c = getC(pos);
-        r = getR(pos);
-        current = board[r][c];
-        current.setVisited(true);
-        stack.push(current);
-        nextPos = getNextPos(pos, current.getCount());
-        move(nextPos);
-    }
+//    public void move(int pos, int count)
+//    {
+//        count++;
+//        c = getC(pos);
+//        r = getR(pos);
+//        current = board[r][c];
+//        current.setVisited(true);
+//        stack.push(current);
+//        nextPos = getNextPos(pos, current.getCount());
+//        move(nextPos, count);
+//    }
 
-    public int getNextPos(int pos, int cycle) // picks next
+    public void move(int pos, int count) // picks next
     { // possible
-        //while(cycle < 8) // move
-        //{
+        count++;
+        while(cycle < 8) // move
+        {
             int dc = moves8[cycle][0]; // get move in
             int dr = moves8[cycle][1]; // (x,y) format
             c = getC(pos);
@@ -83,15 +85,17 @@ public class Board {
             cycle++; // used this move
             if(c>=0 && c<size && r>=0 && r<size) // on the board?
             { // yes
-                int nextPos = c + r*size + 1; // (x,y) to j
-                if(get(nextPos)==false) // unoccupied cell?
+                if(board[r][c].getVisited()==false) // unoccupied cell?
                 { // yes
-                    return nextPos; // found a move
+                    int nextPos = c + r*size + 1; // (x,y) to j
+                    move(nextPos, count); // found a move
+                    String m = Integer.toString(pos);
                 }
             } // end if(x>=0...)
-        //} // end while // no possible move
-        //cycle = 0; // reset move index
-        return -1; // failure
+        } // end while // no possible move
+        System.out.println("");
+        cycle = 0; // reset move index
+        //return -1; // failure
     } // end getNextPos()
 }   
 
