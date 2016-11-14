@@ -19,6 +19,7 @@ public class Board {
     private boolean visited;
     private int size, r0, c0, countMoves, c, r;
     private Stack stack;
+    private String m;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
         {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} };
@@ -71,9 +72,15 @@ public class Board {
 //        move(nextPos, count);
 //    }
 
+    public void startString(int pos)
+    {
+        m = Integer.toString(pos);
+    }
+    
     public String move(int pos, int count, int cycle) // picks next
     { // possible
         count++;
+        cycle = 0;
         while(cycle < 8) // move
         {
             int dc = moves8[cycle][0]; // get move in
@@ -93,13 +100,17 @@ public class Board {
                     nextMove = board[r][c];
                     nextMove.visit();
                     int nextPos = c + r*size + 1; // (x,y) to j
-                    String m = Integer.toString(pos) + " " + Integer.toString(nextPos);
+                    m = m + " " + Integer.toString(nextPos);
                     move(nextPos, count, nextMove.getCount()); // found a move
                     countMoves = count;
-                    
+                    return m;
 //                    if (countMoves == (size*size))
 //                    {
 //                        return m;    
+//                    }
+//                    else
+//                    {
+//                        move(pos, count, current.getCount());
 //                    }
                 }
             } // end if(x>=0...)
