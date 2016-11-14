@@ -25,6 +25,7 @@ public class Main {
             int start = in.nextInt();
 
             Board board = new Board(size);
+	    board.startString(start);
             String s = board.move(start, 0, 0);
             
             if (s.equals("Failure"))
