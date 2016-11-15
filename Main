@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lab_3;
 
 /**
- *
- * @author Madeline
+ * @author Madeline Kelly, Katherine Wright, Ryan Trefethen
  */
 
 import java.util.Scanner;
@@ -17,29 +12,57 @@ public class Main {
     
     public static void main(String [] args)
 	{
-            Scanner in = new Scanner(System.in);
-            
-            System.out.print("Enter a board size (ex: 8 for an 8x8 board): ");
-            int size = in.nextInt(); 
-            System.out.print("Enter a number for the starting square (1 to " + (size*size) + "): ");
-            int start = in.nextInt();
+            boolean keepGoing = true;
+            while(keepGoing)
+            {
+                Scanner in = new Scanner(System.in);
+                try
+                {
+                    System.out.println("");
+                    System.out.print("Enter a board size (ex: 8 for an 8x8 board): ");
+                    int size = in.nextInt(); 
+                    System.out.print("Enter a number for the starting square (1 to " + (size*size) + "): ");
+                    int start = in.nextInt();
 
-            Board board = new Board(size);
-	    board.startString(start);
-            String s = board.move(start, 0, 0);
-            
-            if (s.equals("Failure"))
-            {
-                System.out.println(s);
-                System.out.println("Total Number of Moves = " + board.getMoves());
-                System.out.println("Moving Sequence: " + start);
+                    Board board = new Board(size); //Make a new board with the entered size
+                    String s = board.move(start, 0); //Start making moves with the given starting point and an initial count of 0
+                                                     //move() returns a String
+                    if (s.equals("Failure")) //If move() returned failure
+                    {
+                        System.out.println("");
+                        System.out.println(s);
+                        System.out.println("Total Number of Moves = " + board.getMoves());
+                        System.out.println("Moving Sequence: " + start);
+
+                    }
+                    else
+                    {
+                        System.out.println("");
+                        System.out.println("Success!");
+                        System.out.println("Total Number of Moves = " + board.getMoves());
+                        System.out.println("Moving Sequence: " + s);
+                    }
+
+                    System.out.println("");
+                    System.out.print("Enter 'True' if you would like to try another solution. Enter 'False' if you would like to quit. >" ); //Keeps the loop going if you want to continue
+                    
+                    String i = in.next();
+
+                    if(i.equals("true") || i.equals("t") || i.equals("True") || i.equals("T")) //Just in case the user input any of these things beyond the indicated input
+                    {
+                    }
+                    else //quit out of loop
+                    {
+                        keepGoing = false;
+                    }
                 
-            }
-            else
-            {
-                System.out.println("Success!");
-                System.out.println("Total Number of Moves = " + board.getMoves());
-                System.out.println("Moving Sequence: " + s);
+                }
+                catch(InputMismatchException e) //catch any mismatchexpcetion
+                {
+                    String error = in.nextLine(); //stop the infinite loop
+                    System.out.println("");
+                    System.out.println("Error. You did not enter an integer value. \nPlease try again."); //tell them their error
+                }
             }
         }
     
