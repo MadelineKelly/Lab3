@@ -1,33 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lab_3;
-
-/**
- *
- * @author Madeline
- */
-
-import java.util.Stack;
 
 public class Board {
     
     private Spot[][] board;
     private Spot current, nextMove;
-    private boolean visited;
-    private int size, r0, c0, countMoves, c, r;
-    private Stack stack;
+    private int size, c, r, Movecount;
     private String m;
     
     private static int[][] moves8 = { {+1,-2}, {+2,-1}, {+2,+1}, {+1,+2}, 
-        {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} };
+        {-1,+2}, {-2,+1}, {-2,-1}, {-1,-2} }; //array of all the possible knight moves 
     
     Board(int size)
     {
         this.size = size;
-        board = new Spot[size][size];
+        board = new Spot[size][size]; //make new board
         
         //fill board with new Spots
         for (int i = 0; i < board.length; i++)
@@ -37,110 +24,59 @@ public class Board {
                board[i][j] = new Spot();
            }
         }
-        Stack stack = new Stack();
-    }
+    }   
     
-//    public boolean get(int pos)
-//    {
-//        c = getC(pos);
-//        r = getR(pos);
-//        visited = board[r][c].getVisited();
-//        return visited;
-//    }
-    
-    public int getC(int pos)
-    {
-        c = (pos-1)%size;
-        return c;
-    }
-    
-    public int getR(int pos)
-    {
-        r = (pos-1)/size;
-        return r;
-    }
-    
-//    public void move(int pos, int count)
-//    {
-//        count++;
-//        c = getC(pos);
-//        r = getR(pos);
-//        current = board[r][c];
-//        current.setVisited(true);
-//        stack.push(current);
-//        nextPos = getNextPos(pos, current.getCount());
-//        move(nextPos, count);
-//    }
-
-    public void startString(int pos)
-    {
-        m = Integer.toString(pos);
-    }
-    
-    public String move(int pos, int count, int cycle) // picks next
-    { // possible
-        count++;
-        //cycle = 0;
-        while(cycle < 8) // move
+    public String move(int pos, int count)
+    { 
+        count++; //value to determine if the board is full
+        Movecount++; //keeps track of total number of times we call move()
+        int cycle = 0; //value to cycle through possible moves in moves8[][], resets for every new position we call this method for 
+        while(cycle < 8) 
         {
-            int dc = moves8[cycle][0]; // get move in
-            int dr = moves8[cycle][1]; // (x,y) format
-            c = getC(pos);
-            r = getR(pos);
-            current = board[r][c];
-            current.visit();
-            current.incCount();
-            c = c + dc; // add move to
-            r = r + dr; // position
-            cycle++; // used this move
-            if(c>=0 && c<size && r>=0 && r<size) // on the board?
-            { // yes
-                if(board[r][c].getVisited()==false) // unoccupied cell?
-                { // yes       
-                    nextMove = board[r][c];
-                    nextMove.visit();
-                    int nextPos = c + r*size + 1; // (x,y) to j
-                    m = m + " " + Integer.toString(nextPos);
-                    move(nextPos, count, nextMove.getCount()); // found a move
-                    countMoves = count;
-                    return m;
-//                    if (countMoves == (size*size))
-//                    {
-//                        return m;    
-//                    }
-//                    else
-//                    {
-//                        move(pos, count, current.getCount());
-//                    }
+            int dc = moves8[cycle][0]; //move in column
+            int dr = moves8[cycle][1]; //move in row
+            c = (pos-1)%size;  //calculate value of c from pos
+            r = (pos-1)/size;  //calculate value of r from pos
+            current = board[r][c]; //current spot in the array
+            current.visit();   //mark it as visited
+            c = c + dc;    //generate new column position
+            r = r + dr;    //generate new row position
+            cycle++;       // increment cycle so that we don't do this move again at this spot
+            if(c>=0 && c<size && r>=0 && r<size) //if we're on the board
+            {
+                if(board[r][c].getVisited()==false) //and the spot we want to go to hasn't already been visited
+                {
+                    nextMove = board[r][c]; //this is our new spot
+                    nextMove.visit();       //mark it as visited
+                    int nextPos = c + r*size + 1;   //generate new position from our column and row
+                    m = move(nextPos, count);    //call move again with new position and updated count
+                                                 //then assign a String variable to its output
+                    
+                    if (m.equals("Failure")) //if we don't have anymore possible moves at a certain spot, go up to the previous thing recursively called and make a new move there
+                    {                        //if all possible moves for all spots are exhausted and m = failure, move() will return failure to Main
+                    }
+                    else //if we've found a solution, start tacking on our positions to the String m and move will return the final m to Main 
+                    {   
+                        m = Integer.toString(pos) + " " + m;
+                        return m;
+                    }
                 }
-            } // end if(x>=0...)
-        } // end while // no possible move
-        cycle = 0; // reset move index
-        String m = "Failure";
-        return m;
-        //return -1; // failure
-    } // end getNextPos()
+            }
+        } 
+       
+       if (count ==  size*size) //if we've made 25 valid moves (i.e. we've gone to every spot on the board once) then:
+       {
+           m = Integer.toString(pos); //this is the last position we went to 
+           return m; //return this value and it will go back up to the while loop, go into the else part of "if(m.equals("Failure"))" and start going back up through, 
+                     //adding to m in the order of the moves we went through (this is the recursion at work)
+       }
+       board[(pos-1)/size][(pos-1)%size].unvisit(); //if we haven't successfully visited the entire board, mark our current spot as unvisited and go back up through the recursion
+       m = "Failure"; //m = "Failure" tells the recursive method to keep going through the while loop until we find a sequence of moves that works or we exhaust all our options and find no solution
+       return m;
+    }
     
     public int getMoves()
     {
-        return countMoves;
+        return Movecount;
     }
 }   
-
-//Idea: Create a Spot class that keeps track of whether or not the spot has been visited (true/false), and how many times we've been to it.
-//If we've only been in this spot once, make the first move of move8. If it's the second time (i.e. we backtracked once because we got stuck), make
-//the second move of move8. And so on and so forth.
-//If all options have been exhausted for every spot and we have not won yet, then return "Failure."
-
-//Things to do:
-//take in starting square and start making moves
-//mark as visited (true) when moved to
-//put Spot info on a stack
-//keep track of number of moves
-//pop off stack and mark as false if we must backtrack
-//determine whether or not we have failed
-//What does last "()" value mean in their output for moving sequence?
-//How do we back track when we get stuck? 
-//      - Making sure we change the spots we visited back to false
-//      - Keeping track of which moves we've already done we've been
-//Do we want to use their getNextPos method or our own? //Mix of both
